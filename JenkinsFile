@@ -1,12 +1,16 @@
 pipeline {
     agent any
     stages {
-        stage('build') {
+        stage('Build Application') {
             steps {
-                echo "Welcome to Jenkins Enviroment"
-                sh 'echo using shell within Jenkinsfile'
-                echo 'not using shell within Jenkinsfile'             
+                sh 'mvn -f pom.xml clean package'
             }
-        }        
+            post {
+                success {
+                    echo "Now Archiving the Artifacts....."
+                    archiveArtifacts artifacts: '**/*.war'
+                }
+            }
+        }
     }
 }
